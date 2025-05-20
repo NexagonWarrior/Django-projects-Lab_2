@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab_2</title>
+    <style>
+        .p-1 {
+            font-size: 28px;
+        }
+
+        table, th, td {
+            border: 1px solid grey;
+            text-align: center;
+        } 
+    </style>
+</head>
+<body>
+    <h1><b>Привіт, мене звуть <i>Едуард</i></b></h1>
+    <p class="p-1">Я навчаюся на 3-му курсі</p> 
+    <p class="p-2">Останню сесію я склав наступним чином</p>
+
+    {% if request.GET %}
+        {% with fail=False %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Назва предмету</th>
+                    <th>Оцінка</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for key, value in request.GET.items %}
+                {% if value|add:0 < 60 %}
+                    {% with fail=True %}
+                    {% endwith %}
+                {% endif %}
+                <tr>
+                    <td>{{ key }}</td>
+                    <td>
+                        {% if value|add:0 < 60 %}
+                            <span style="color: red; font-weight: bold;">Не складено</span>
+                        {% else %}
+                            {{ value }}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% if fail %}
+            <p style="color: red; font-weight: bold;">Сесію не складено! Є оцінки нижче 60.</p>
+        {% endif %}
+
+        {% endwith %}
+    {% else %}
+        <p style="color: grey;">Немає переданих оцінок.</p>
+    {% endif %}
+</body>
+</html>
